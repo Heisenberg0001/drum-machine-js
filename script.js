@@ -137,7 +137,6 @@ function setParentStyle( eventType, element ) {
     }
 }
 function play( element ) {
-    console.log(element.volume);
     element.play();
 }
 function buttonEvents() {
