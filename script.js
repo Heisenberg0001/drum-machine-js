@@ -95,11 +95,28 @@ const bankBtn = getElementById('bank-btn-slider');
 const powerBtn = getElementById('power-btn-slider');
 const display = getElementById('display');
 const buttons = document.getElementsByClassName('btns-container')[0].getElementsByTagName('li');
+const volumeSlider = getElementById('volume-slider');
+let allAudio = document.getElementsByTagName("audio");
+
 let power;
 
 bankBtn.addEventListener('click', onBankChange);
 powerBtn.addEventListener('click', onPower);
+volumeSlider.addEventListener('change', ( event) => { setVolume(event.currentTarget.value); });
 
+function setVolume( volume ) {
+    for (let i = 0; i < allAudio.length ; i++) {
+        allAudio[i].volume = volume;
+    }
+}
+function volumeMute() {
+    setVolume( 0 );
+    volumeSlider.value = 0;
+}
+function volumeMax() {
+    setVolume( 1 );
+    volumeSlider.value = 1;
+}
 function getElementById( id ) {
     return document.getElementById(id);
 }
@@ -120,6 +137,7 @@ function setParentStyle( eventType, element ) {
     }
 }
 function play( element ) {
+    console.log(element.volume);
     element.play();
 }
 function buttonEvents() {
@@ -266,6 +284,7 @@ function onStartup() {
     bankBtn.style.float = 'left';
     buttonEvents();
     giveProperties(bankOne);
+    setVolume( volumeSlider.value );
     keyListeners();
 }
 
