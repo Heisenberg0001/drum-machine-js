@@ -102,23 +102,25 @@ let power;
 
 bankBtn.addEventListener('click', onBankChange);
 powerBtn.addEventListener('click', onPower);
-volumeSlider.addEventListener('change', ( event) => { setVolume(event.currentTarget.value); });
+volumeSlider.addEventListener('change', ( event) => {
+    setVolume(event.currentTarget.value);
+    console.log(event.currentTarget.value);
+});
 
+function getElementById( id ) {
+    return document.getElementById(id);
+}
 function setVolume( volume ) {
     for (let i = 0; i < allAudio.length ; i++) {
         allAudio[i].volume = volume;
     }
+    volumeSlider.value = volume;
 }
 function volumeMute() {
     setVolume( 0 );
-    volumeSlider.value = 0;
 }
 function volumeMax() {
     setVolume( 1 );
-    volumeSlider.value = 1;
-}
-function getElementById( id ) {
-    return document.getElementById(id);
 }
 function getParent( element ) {
     return element.parentNode;
@@ -127,7 +129,9 @@ function setParentStyle( eventType, element ) {
     let parentElement = getParent(element);
 
     if (eventType === 'keydown') {
-        display.innerText = parentElement.id;
+        if ( power ) {
+            display.innerText = parentElement.id;
+        }
         parentElement.style.fontSize = "xx-large";
         parentElement.style.boxShadow = "0 0 0";
     }
@@ -143,8 +147,9 @@ function buttonEvents() {
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].addEventListener('mousedown', () => {
             buttons[i].style.boxShadow = "0 0 0";
-            if (power) {
-                play(buttons[i].getElementsByTagName("audio")[0]);
+            play(buttons[i].getElementsByTagName("audio")[0]);
+
+            if( power ) {
                 display.innerHTML = buttons[i].id;
             }
         });
@@ -177,12 +182,14 @@ function onBankChange() {
 function onPower() {
     if( power ){
         powerBtn.style.float = 'right';
-        power = false;
         display.innerHTML = '';
+        volumeMute();
+        power = false;
 
     } else {
         powerBtn.style.float = 'left';
         power = true;
+        setVolume(0.5);
     }
 }
 function keyListeners() {
